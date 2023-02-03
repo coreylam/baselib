@@ -1,20 +1,44 @@
-.. baselib documentation master file, created by
-   sphinx-quickstart on Fri Feb  3 21:59:42 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+baselib
+##################################################
 
-Welcome to baselib's documentation!
-===================================
+概述
+==================================================
+
+背景
+--------------------------------------------------
+
+xxxx
+
+.. seealso::
+    `xxxx <http://www.baidu.com>`_
+
+
+本文档使用方法
+--------------------------------------------------
+
+xxx
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: TIME
+   :hidden:
+   :glob:
 
+   time/*
 
+.. toctree::
+   :maxdepth: 2
+   :caption: DEMO
+   :hidden:
+   :glob:
 
-Indices and tables
-==================
+   demo/*
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+更新日志
+==================================================
+
+最近更新: |last_update|
+
+- [2023-02-03] xxxxx
+
+.. include:: variables.rst
