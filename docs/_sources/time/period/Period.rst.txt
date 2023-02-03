@@ -7,7 +7,7 @@ Period
 
 .. code:: python
 
-  from tcelib.toolbox.period import Period
+  from baselib.time.period import Period
 
 
 获取 N 小时内时间段（起止时间）

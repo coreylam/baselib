@@ -20,21 +20,20 @@ sphinx-quickstart
 ## 配置 conf
 参考本分支下的配置, 自行设置主题等
 
-## 建立软连接(用于Github Pages)
-在 github 页面的 settings 中, 选择本分支, 目录选择 docs, 在项目中创建软连接
-
-```shell
-ln -s ./build/html docs
-```
-
 ## 编译并提交
 在项目根目录下, 用 make 将 rst 文件编译成 html 静态文件, 并提交
 ```shell
 make html
 ```
 
+## 将 build/html 下的文件拷贝到 docs 目录(用于Github Pages)
+在 github 页面的 settings 中, 选择本分支, 目录选择 docs, 在项目中创建软连接
+
+```shell
+mv ./build/html docs
+```
 ## Jekyll 配置
-https://docs.github.com/zh/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll
+- [about-github-pages-and-jekyll](https://docs.github.com/zh/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll)
 
 由于 Github 使用 Jekyll 进行静态网站生成, 且默认情况下，Jekyll 不会构建以下文件或文件夹：
 
@@ -46,9 +45,14 @@ https://docs.github.com/zh/pages/setting-up-a-github-pages-site-with-jekyll/abou
 
 由于 sphinx 编译出来的静态网站文件, 默认是在 html/_static 目录, 会导致该资源无法打包, 因此需要在 include 中配置, 具体操作如下:
 
-创建配置文件 _config.yml, 在文件中编写 include
+在 docs 目录下创建配置文件 _config.yml, 在文件中编写 include
 ```shell
 include: ['_static']
+```
+
+由于每次 make 后, 需要刷新 docs 文件, 所以可以将 _config.yml 文件创建到 根目录下, 每次重新 make 后, 将文件复制到 docs 目录
+```shell
+cp _config.yml docs/
 ```
 
 
