@@ -1,1 +1,4 @@
 # requirements.txt
+Sphinx
+recommonmark
+sphinx_rtd_theme
