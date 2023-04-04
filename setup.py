@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='baselib',
-    version="1.0.5",
+    version="1.0.6",
     description='base common lib for python',
     author='coreylam',
     author_email='coreylam@163.com',

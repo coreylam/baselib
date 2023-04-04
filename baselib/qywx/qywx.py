@@ -6,10 +6,16 @@
 @author     : coreylin
 @createTime : 2018/12/22
 """
-from baselib.py import urllib2
 import json
 import base64
 import hashlib
+
+from baselib.py import urllib2
+from baselib.py import IS_PY3
+
+if not IS_PY3:
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
 
 
 class QyWechat(object):

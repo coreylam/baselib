@@ -1,1 +1,1 @@
-from .file import file_logger
+from baselib.log.file import file_logger
