@@ -35,7 +35,7 @@ class QyWechat(object):
             self,
             key,
             proxy="",
-            is_ssl=False,
+            is_ssl=True,
             debug=False):
         # 在 init 中定义所有私有变量，方便查找，无特别意义
         self.key = None
