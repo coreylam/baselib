@@ -269,28 +269,39 @@ class QyWechat(object):
         return lines
 
     def split_msg_by_line(self, msg, limit=4096):
-        """ 将数据按行分页
-            本函数适用场景： 消息分多行，单行不超过 limit的情况，单行limit会直接截断
-        :param string msg: 消息内容
+        """将数据按行分页
+
+        本函数适用场景：消息分多行，单行不超过 limit 的情况，单行 limit 会直接截断
+
+        :param str msg: 消息内容
         :param int limit: 消息长度限制
-        :rtype: list
         :return: 返回分页后的数据列表
+        :rtype: list
         """
+        # 去除消息内容两端的空格
         msg = msg.strip()
+        # 计算消息内容的字节数
         msg_len = len(msg.encode("utf-8"))
+        # 如果消息内容的字节数小于限制，则直接返回
         if msg_len < limit:
             return [msg]
+        # 初始化分页长度、页码、页列表
         page_len = page_no = 0
         page_list = [""]
+        # 遍历消息内容的每一行
         for aline in msg.split("\n"):
+            # 计算当前行的字节数
             len_aline = len("{}\n".format(aline).encode("utf-8"))
+            # 如果当前行加上分页长度小于限制，则将当前行添加到当前页
             if page_len + len_aline <= limit:
                 page_len += len_aline
                 page_list[page_no] += "{}\n".format(aline)
                 continue
+            # 如果当前行加上分页长度大于限制，则将当前行添加到新的一页
             page_len = 0
             page_no += 1
             page_list.append(self.cut_msg(aline, limit, "..."))
+        # 返回分页后的数据列表
         return [i.strip() for i in page_list]
 
 
