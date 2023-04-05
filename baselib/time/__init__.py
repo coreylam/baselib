@@ -1,1 +1,1 @@
-from .period import Period
+from baselib.time.period import Period
