@@ -141,7 +141,10 @@ class QyWechat(object):
     def send_news(self, data):
         pass
 
-    def send_markdown(self, msg, limit=4096, multi_page=True, post_msg="\n..."):
+    def send_markdown(
+            self, msg, limit=4096, multi_page=True, post_msg="\n...", to_user=None, 
+            to_party=None, to_tag=None, agentid=None, enable_duplicate_check=None,
+            duplicate_check_interval=None):
         """ 发送 markdown 格式的数据
         :param msg: 发送的数据内容（markdown格式）
         :param limit: 分页参数，每条消息的最大长度（企业微信默认4096），超过该长度报错
@@ -179,7 +182,9 @@ class QyWechat(object):
             msg_list = [self.limit_msg_length(msg, limit, post_msg)]
         rsp_list = []
         for msg in msg_list:
-            rsp_list.append(self._send(format_markdown(msg)))
+            rsp_list.append(self._send(format_markdown(
+                msg, to_user, to_party, to_tag, agentid, 
+                enable_duplicate_check, duplicate_check_interval)))
         if len(rsp_list) == 1:
             return rsp_list[0]
         return rsp_list
