@@ -163,9 +163,17 @@ class QyWechat(object):
         pass
 
     def send_markdown(
-            self, msg, page_type=EnumPageType.CUT, limit=4096, post_msg="\n...",
-            to_user=None, to_party=None, to_tag=None, agent_id=None,
-            enable_duplicate_check=None, duplicate_check_interval=None):
+            self,
+            msg,
+            page_type=EnumPageType.CUT,
+            limit=4096,
+            post_msg="\n...",
+            to_user=None,
+            to_party=None,
+            to_tag=None,
+            agent_id=None,
+            enable_duplicate_check=None,
+            duplicate_check_interval=None):
         """ 发送 markdown 格式的数据
         :param string msg: 发送的数据内容（markdown格式）
         :param int limit: 分页参数，每条消息的最大长度（企业微信默认4096），超过该长度报错
@@ -200,8 +208,14 @@ class QyWechat(object):
         return rsp_list
 
     def raw_send_markdown(
-            self, content, to_user=None, to_party=None, to_tag=None, agent_id=None,
-            enable_duplicate_check=None, duplicate_check_interval=None):
+            self,
+            content,
+            to_user=None,
+            to_party=None,
+            to_tag=None,
+            agent_id=None,
+            enable_duplicate_check=None,
+            duplicate_check_interval=None):
         """ 发送 markdown 消息
         """
         data = {
@@ -237,15 +251,28 @@ class QyWechat(object):
         :rtype: string
         :return: 返回截断后数据
         """
-        msg_len = len(msg.encode("utf-8"))
+
+        msg_unicode, encode = self.__decode_msg(msg)
+        msg_len = len(msg_unicode.encode("utf-8"))
         if msg_len <= limit:
             return msg
-        post_msg_len = len(post_msg.encode("utf-8"))
+        post_msg_unicode, _ = self.__decode_msg(post_msg)
+        post_msg_len = len(post_msg_unicode.encode("utf-8"))
         idx = 0
-        for idx in range(len(msg)):
-            if len(msg[:-1 - idx].encode("utf-8")) <= limit - post_msg_len:
+        for idx in range(len(msg_unicode)):
+            if len(msg_unicode[:-1 - idx].encode("utf-8")) <= limit - post_msg_len:
                 break
-        return msg[:-1 - idx] + post_msg
+        ret = msg_unicode[:-1 - idx] + post_msg_unicode
+        return ret.encode(encode)
+
+    def __decode_msg(self, msg):
+        try:
+            encode = "utf-8"
+            msg_unicode = msg.decode("utf-8")
+        except UnicodeEncodeError:
+            encode = "unicode"
+            msg_unicode = msg
+        return msg_unicode, encode
 
     def split_msg(self, msg, limit=4096):
         """ 将消息 msg 的长度限制（limit），拆分成多条消息(一条消息即一页）
@@ -254,19 +281,20 @@ class QyWechat(object):
         :rtype: list
         :return: 返回分页后的数据列表
         """
-        msg_len = len(msg.encode("utf-8"))
+        msg_unicode, encode = self.__decode_msg(msg)
+        msg_len = len(msg_unicode.encode("utf-8"))
         if msg_len <= limit:
             return [msg]
         lines = [""]
         line_no = 0
-        for char in msg:
+        for char in msg_unicode:
             if len(lines[line_no].encode("utf-8")) <= limit - \
                     len(char.encode("utf-8")):
                 lines[line_no] += char
                 continue
             lines.append(char)
             line_no += 1
-        return lines
+        return [i.encode(encode) for i in lines]
 
     def split_msg_by_line(self, msg, limit=4096):
         """将数据按行分页
@@ -292,6 +320,12 @@ class QyWechat(object):
         for aline in msg.split("\n"):
             # 计算当前行的字节数
             len_aline = len("{}\n".format(aline).encode("utf-8"))
+            if len_aline >= limit:
+                page_len = 0
+                page_no += 2
+                page_list.append(self.cut_msg(aline, limit, "..."))
+                page_list.append("")
+                continue
             # 如果当前行加上分页长度小于限制，则将当前行添加到当前页
             if page_len + len_aline <= limit:
                 page_len += len_aline
@@ -300,17 +334,21 @@ class QyWechat(object):
             # 如果当前行加上分页长度大于限制，则将当前行添加到新的一页
             page_len = 0
             page_no += 1
-            page_list.append(self.cut_msg(aline, limit, "..."))
+            page_list.append(aline)
         # 返回分页后的数据列表
-        return [i.strip() for i in page_list]
+        return [i.strip() for i in page_list if len(i)>0]
 
 
 if __name__ == "__main__":
     def demo():
         key = ""  # robot key
         robot = QyWechat(key=key, is_ssl=True, debug=True)
-        aline = "[hello](http://www.baidu.com)"*100
+        aline = "[hello](http://www.baidu.com)" * 100
         print(robot.send_markdown(
             "# test\n" + aline + "\n" + aline + "\n",
             page_type=robot.EnumPageType.SPLIT_BY_LINES))
-    demo()
+    # demo()
+    robot = QyWechat("")
+    msg = "12345\n123456\n12345678901234567890123\n" * 3
+    limit = 20
+    print(robot.split_msg_by_line(msg, limit))

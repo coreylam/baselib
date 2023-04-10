@@ -1,0 +1,17 @@
+[run]
+omit =
+    */site-packages/*
+    */dist-packages/*
+    */tests/*
+    */demo/*
+
+[report]
+show_missing = True
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    def __str__
+    if __name__ == .__main__.:
+
+[html]
+directory = htmlcov
