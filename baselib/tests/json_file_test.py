@@ -19,6 +19,7 @@ class TestJsonFile(object):
         data = JsonFile.read("test.json")
         assert data == {"info": "hello", "msg": "world"}
         os.remove("test.json")
-        os.system('echo "test" > test.json')
+        with open("test.json", "w") as fid:
+            fid.write("test")
         data = JsonFile.read("test.json")
         assert data == {}
