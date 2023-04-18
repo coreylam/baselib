@@ -2,13 +2,23 @@
 # from distutils.core import setup
 from setuptools import find_packages
 from setuptools import setup
-from pathlib import Path
+
+
+def read_desc(filename="README.md"):
+    try:
+        from pathlib import Path
+        desc = Path(filename).read_text(encoding="utf-8")
+    except BaseException:
+        with open(filename, "r") as fid:
+            desc = fid.read()
+    return desc
+
 
 setup(
     name='baselib',
-    version="1.0.7.1",
+    version="1.0.7.2",
     description='base common lib for python',
-    long_description=Path("README.md").read_text(encoding="utf-8"),
+    long_description=read_desc(),
     long_description_content_type="text/markdown",
     author='coreylam',
     author_email='coreylam@163.com',
