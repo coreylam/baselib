@@ -43,3 +43,12 @@ now = Period.now()
 # 将当前时间转换格式
 now_str = Period.formate_datetime(now)
 ```
+
+5. 执行系统命令，并获取返回结果，可以设置是否后台执行，超时时间
+```python
+from baselib.os import system
+system.run_cmd("pwd")
+
+# 可以设置是否后台执行，超时时间等
+system.run_cmd("ping 8.8.8.8", deamon=False, timeout=2)
+```
