@@ -16,7 +16,7 @@ def read_desc(filename="README.md"):
 
 setup(
     name='baselib',
-    version="1.0.7.2",
+    version="@@@version@@@",
     description='base common lib for python',
     long_description=read_desc(),
     long_description_content_type="text/markdown",
