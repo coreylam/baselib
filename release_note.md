@@ -1,8 +1,8 @@
 # ReleaseNote
 
-## 1.0.7.2
+## 1.0.7.3
 
-- Version: 1.0.7.2
+- Version: 1.0.7.3
 - Data: 2023-08-17
 - Note:
   - Update
