@@ -1,8 +1,10 @@
 # -*- coding:utf-8 -*-
 import platform
 
+__all__ = ['IS_PY3', 'httplib', 'urllib2']
 IS_PY3 = int(platform.python_version_tuple()[0]) == 3
 
+# 不需要用这些方式，可以用 from six.moves import urllib 
 # ============================================================
 # from baselib.py import httplib
 if IS_PY3:
