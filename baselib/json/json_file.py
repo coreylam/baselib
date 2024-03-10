@@ -7,6 +7,8 @@ import json
 
 class JsonFile(object):
 
+    encoding = "utf-8"
+
     @classmethod
     def read(cls, file_path):
         """ 读取 文件路径为 $file_path 的 json 文件
@@ -18,7 +20,7 @@ class JsonFile(object):
         if not os.path.isfile(file_path):
             return {}
         try:
-            with open(file_path, 'r') as fid:
+            with open(file_path, 'r', encoding=cls.encoding) as fid:
                 data = json.load(fid)
         except Exception:
             return {}
@@ -33,7 +35,8 @@ class JsonFile(object):
         :return: 实际写入的数据（即入参 data）
         """
         with open(file_path, 'w') as fid:
-            fid.writelines(json.dumps(data, indent=indent))
+            # fid.writelines(json.dumps(data, indent=indent))
+            json.dump(data, fid, indent=indent, ensure_ascii=False)
         return data
 
     @classmethod
