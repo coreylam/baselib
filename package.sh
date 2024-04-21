@@ -1,3 +1,6 @@
+pkg_ver=`cat version`
+echo $pkg_ver
+sed -i "s/@@@version@@@/${MAGIC_VERSION}/g" setup.py
 rm -rf dist
 python3 setup.py sdist
-twine upload --username ${PROJ_USER} --password ${PROJ_PWD}   --verbose dist/*
+python3 -m twine upload --repository baselib --verbose dist/*
